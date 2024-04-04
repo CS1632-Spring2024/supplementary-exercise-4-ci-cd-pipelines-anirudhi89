@@ -7,6 +7,16 @@ public class RentACatImpl implements RentACat {
 
 	private ArrayList<Cat> cats = new ArrayList<Cat>();
 
+	private Cat findCat(int id) {
+		for (Cat cat : cats) {
+			if (cat.getId() == id) {
+				return cat;
+			}
+		}
+		return null;
+	}
+
+
 	/**
 	 * Return a cat. This should call the .returnCat() method on the cat for the
 	 * passed-in cat id. If the cat with the id exists in the list of cats and has
@@ -16,11 +26,21 @@ public class RentACatImpl implements RentACat {
 	 * @param id the ID of the cat to rent
 	 * @return true if cat exists and was rented out, false otherwise
 	 */
-
 	public boolean returnCat(int id) {
-		// TODO: Fill in
+		Cat cat2return = findCat(id);
+		for (Cat cat : cats) {
+			if ((cat.getId() == id) && (cat.getRented() == true)) {
+				System.out.println("Welcome back, " + cat.getName() + "!");
+				cat.returnCat();
+				return true;
+			}
+		} 
+		if (cat2return != null) {
+			System.out.println(cat2return.getName() + " is already here!");
+		}
 		return false;
 	}
+	
 
 	/**
 	 * Rent a cat. This should call the .rentCat() method on the cat for the
@@ -33,8 +53,19 @@ public class RentACatImpl implements RentACat {
 	 */
 
 	public boolean rentCat(int id) {
-		// TODO: Fill in
-		return false;
+		Cat cat = findCat(id);
+		if (cat == null) {
+			return false;
+		}
+		if (!cat.getRented()) {
+			System.out.print(cat.getName() + " has been rented.\n");
+			cat.rentCat();
+			return true;
+		}
+		else {
+			System.out.println("Sorry, " + cat.getName() + " is not here!");
+			return false;
+		}
 	}
 
 	/**
@@ -47,8 +78,13 @@ public class RentACatImpl implements RentACat {
 	 */
 
 	public boolean renameCat(int id, String name) {
-		// TODO: Fill in
-		return false;
+		Cat cat = findCat(id);
+		if (cat == null) {
+			System.out.println("Invalid cat ID.");
+			return false;
+		}
+		cat.renameCat(name);
+		return true;
 	}
 
 	/**
@@ -62,8 +98,11 @@ public class RentACatImpl implements RentACat {
 	 */
 
 	public String listCats() {
-		// TODO: Fill in
-		return "WRITE CODE FOR THIS";
+		StringBuilder tempstr = new StringBuilder();
+		for (Cat cat : cats) {
+			if (!cat.getRented()) tempstr.append(cat.toString() + "\n");
+		}
+		return tempstr.toString();
 	}
 
 	/**
