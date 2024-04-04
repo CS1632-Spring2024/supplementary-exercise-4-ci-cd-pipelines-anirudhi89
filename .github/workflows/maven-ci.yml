@@ -58,6 +58,8 @@ jobs:
         key: cached-build-${{github.sha}}
         path: .
 
+    needs: [maven_test]  # Enforces that maven_test runs first
+    
     runs-on: ubuntu-latest
 
     permissions:
